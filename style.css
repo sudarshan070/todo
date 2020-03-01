@@ -181,3 +181,9 @@ input:checked + p {
 .all {
   border: 1px solid #b31414;
 }
+
+.fas {
+  position: relative;
+  left: 25px;
+  font-size: 20px;
+}

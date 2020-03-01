@@ -31,7 +31,6 @@ function todoS(arr) {
     p.innerHTML = todo.text;
     li.append(check, p, span);
     ul.append(li);
-    update(arr);
     check.addEventListener("click", () => strkeItem(todo.id));
     var footer = footerCreate(arr);
     ul.after("");
@@ -52,15 +51,11 @@ function todoDelete(event) {
 }
 
 function strkeItem(id) {
-  //   let flag = 0;
-
   var Arr = arr.map(todo => {
     if (todo.id == id) {
       todo.isDone = !todo.isDone;
-      update(arr);
       return todo;
     } else {
-      update(arr);
       return todo;
     }
   });
@@ -68,22 +63,28 @@ function strkeItem(id) {
   todoS(Arr);
 }
 
-function allF(arr, event) {
+function allF() {
   todoS(arr);
 }
 
-function activeF(arr, event) {
-  var activeArr = arr.filter(todo => todo.isDone == false);
-  console.dir(event);
-  todoS(activeArr);
+function activeF(arr) {
+  let Arr = arr.filter(todo => todo.isDone === false);
+  todoS(Arr);
 }
 function completeF(arr, event) {
-  var completeArr = arr.filter(todo => todo.isDone == !false);
+  let completeArr = arr.filter(todo => todo.isDone != false);
   todoS(completeArr);
 }
-function update(arr) {
-  var updateLeft = arr.filter(todo => todo.isDone == false).length;
-  console.log(updateLeft);
+
+function clearCompleted(arr, event) {
+  let clearArr = arr.filter(todo => todo.isDone == true);
+  clearArr.forEach(todo => {
+    arr.splice(todo, clearArr.length);
+    todoS(arr);
+  });
+
+  todoS(clearArr);
+  console.log(clearArr);
 }
 
 /* <footer class="footer">
@@ -106,8 +107,12 @@ function footerCreate(arr) {
   var footer = document.createElement("footer");
   footer.classList.add("footer");
 
-  var itemLeft = document.createElement("p");
-  itemLeft.textContent = "Items left";
+  var itemLeft = document.createElement("p"); // <p>  ... </p>
+  // var spanP = document.createElement("span"); // <span> 0 </span>
+  // spanP.innerHTML = "0";
+  // itemLeft.append(spanP);
+  // itemLeft.innerHTML = ; //   <p> <span> 0 </span> items left </p>
+  itemLeft.textContent = `${arr.length} Items left`;
 
   var all = document.createElement("button");
   all.classList.add("all");
@@ -121,9 +126,14 @@ function footerCreate(arr) {
   complete.classList.add("complete");
   complete.textContent = "Completed";
 
-  footerDiv.append(footer);
-  footer.append(itemLeft, all, active, complete);
+  var clear_completed = document.createElement("p");
+  clear_completed.classList.add("clear_completed");
+  clear_completed.textContent = "clear completed";
 
+  footerDiv.append(footer);
+  footer.append(itemLeft, all, active, complete, clear_completed);
+
+  clear_completed.addEventListener("click", () => clearCompleted(arr, event));
   all.addEventListener("click", () => allF(arr, event));
   active.addEventListener("click", () => activeF(arr, event));
   complete.addEventListener("click", () => completeF(arr, event));
