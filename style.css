@@ -146,7 +146,7 @@ h1 {
 }
 
 .input {
-  padding: 20px;
+  padding: 20px 32px;
   font-size: 24px;
   font-style: italic;
   width: 400px;
@@ -183,7 +183,8 @@ input:checked + p {
 }
 
 .fas {
-  position: relative;
-  left: 25px;
-  font-size: 20px;
+  position: absolute;
+  /* left: 25px; */
+  font-size: 26px;
+  padding: 20px 16px;
 }

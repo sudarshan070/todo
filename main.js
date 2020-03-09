@@ -1,5 +1,6 @@
 var input = document.querySelector(".input");
 var ul = document.querySelector("ul");
+var fas = document.querySelector(".fas");
 var arr = [];
 
 function handler(event) {
@@ -10,9 +11,10 @@ function handler(event) {
       isDone: false,
       id: Date.now()
     };
+    console.log(todo);
     arr.push(todo);
     todoS(arr);
-    // console.log(arr);
+    console.log(arr);
   }
 }
 
@@ -81,10 +83,26 @@ function clearCompleted(arr, event) {
   clearArr.forEach(todo => {
     arr.splice(todo, clearArr.length);
     todoS(arr);
+    // arr.pull(clearArr)
   });
 
   todoS(clearArr);
   console.log(clearArr);
+}
+
+function selectAll(event) {
+  var selectAllFalse = arr.filter(elm => elm.isDone == false);
+  if (selectAllFalse.length == 0) {
+    arr.forEach(elm => {
+      return elm.isDone == false;
+    });
+  } else {
+    arr.forEach(elm => {
+      return elm.isDone == true;
+    });
+  }
+  todoS(selectAllFalse);
+  console.log(selectAllFalse);
 }
 
 /* <footer class="footer">
@@ -140,5 +158,6 @@ function footerCreate(arr) {
   return footerDiv;
 }
 
+fas.addEventListener("click", selectAll);
 ul.addEventListener("click", todoDelete);
 input.addEventListener("keyup", handler);
