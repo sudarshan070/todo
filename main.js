@@ -1,6 +1,7 @@
 var input = document.querySelector(".input");
 var ul = document.querySelector("ul");
-var fas = document.querySelector(".fas");
+var fas = document.querySelector(".icon");
+
 var arr = [];
 
 function handler(event) {
@@ -11,10 +12,8 @@ function handler(event) {
       isDone: false,
       id: Date.now()
     };
-    console.log(todo);
     arr.push(todo);
     todoS(arr);
-    console.log(arr);
   }
 }
 
@@ -45,7 +44,6 @@ function todoDelete(event) {
   //   console.log(event.target);
   if (event.target.tagName === "SPAN") {
     // console.log("span");
-    console.log(event.target.dataset.id);
     arr = arr.filter(todo => !(todo.id == event.target.dataset.id));
     // console.log(arr);
     todoS(arr);
@@ -61,7 +59,6 @@ function strkeItem(id) {
       return todo;
     }
   });
-  console.log(Arr);
   todoS(Arr);
 }
 
@@ -69,41 +66,56 @@ function allF() {
   todoS(arr);
 }
 
-function activeF(arr) {
+function activeF() {
+  console.log(arr);
   let Arr = arr.filter(todo => todo.isDone === false);
+  console.log(arr);
   todoS(Arr);
 }
-function completeF(arr, event) {
-  let completeArr = arr.filter(todo => todo.isDone != false);
+
+function completeF() {
+  let completeArr = arr.filter(todo => todo.isDone === true);
+  console.log(arr);
   todoS(completeArr);
 }
 
-function clearCompleted(arr, event) {
-  let clearArr = arr.filter(todo => todo.isDone == true);
-  clearArr.forEach(todo => {
-    arr.splice(todo, clearArr.length);
-    todoS(arr);
-    // arr.pull(clearArr)
+function clearCompleted() {
+  arr = arr.filter(todo => todo.isDone == false);
+  // arr.splice(todo, arr.length);
+  console.log(arr);
+  todoS(arr);
+  // arr.pull(clearArr)
+
+  // todoS(arr);
+}
+
+function selectAll() {
+  // console.log(arr);
+  arr.forEach(elm => {
+    if (elm.isDone == false) {
+      elm.isDone = true;
+    }
   });
-
-  todoS(clearArr);
-  console.log(clearArr);
+  console.log(arr);
+  todoS(arr);
 }
 
-function selectAll(event) {
-  var selectAllFalse = arr.filter(elm => elm.isDone == false);
-  if (selectAllFalse.length == 0) {
-    arr.forEach(elm => {
-      return elm.isDone == false;
-    });
-  } else {
-    arr.forEach(elm => {
-      return elm.isDone == true;
-    });
-  }
-  todoS(selectAllFalse);
-  console.log(selectAllFalse);
-}
+// ======================================================================
+var all = document.createElement("button");
+all.classList.add("all");
+all.textContent = "All";
+
+var active = document.createElement("button");
+active.classList.add("active");
+active.textContent = "Active";
+
+var complete = document.createElement("button");
+complete.classList.add("complete");
+complete.textContent = "Completed";
+
+var clear_completed = document.createElement("p");
+clear_completed.classList.add("clear_completed");
+clear_completed.textContent = "clear completed";
 
 /* <footer class="footer">
   <div>
@@ -119,6 +131,8 @@ function selectAll(event) {
   </div>
 </footer>; */
 
+// ====================== footer=================
+
 function footerCreate(arr) {
   var footerDiv = document.querySelector(".footer_div");
   footerDiv.innerHTML = "";
@@ -132,32 +146,19 @@ function footerCreate(arr) {
   // itemLeft.innerHTML = ; //   <p> <span> 0 </span> items left </p>
   itemLeft.textContent = `${arr.length} Items left`;
 
-  var all = document.createElement("button");
-  all.classList.add("all");
-  all.textContent = "All";
-
-  var active = document.createElement("button");
-  active.classList.add("active");
-  active.textContent = "Active";
-
-  var complete = document.createElement("button");
-  complete.classList.add("complete");
-  complete.textContent = "Completed";
-
-  var clear_completed = document.createElement("p");
-  clear_completed.classList.add("clear_completed");
-  clear_completed.textContent = "clear completed";
-
   footerDiv.append(footer);
   footer.append(itemLeft, all, active, complete, clear_completed);
 
-  clear_completed.addEventListener("click", () => clearCompleted(arr, event));
-  all.addEventListener("click", () => allF(arr, event));
-  active.addEventListener("click", () => activeF(arr, event));
-  complete.addEventListener("click", () => completeF(arr, event));
   return footerDiv;
 }
 
+// ========================================================================
+
 fas.addEventListener("click", selectAll);
+
 ul.addEventListener("click", todoDelete);
 input.addEventListener("keyup", handler);
+clear_completed.addEventListener("click", clearCompleted);
+all.addEventListener("click", allF);
+active.addEventListener("click", activeF);
+complete.addEventListener("click", completeF);

@@ -182,9 +182,12 @@ input:checked + p {
   border: 1px solid #b31414;
 }
 
-.fas {
+.icon {
   position: absolute;
   /* left: 25px; */
-  font-size: 26px;
+  width: 50px;
   padding: 20px 16px;
+}
+img {
+  width: 100%;
 }
