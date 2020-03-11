@@ -151,6 +151,7 @@ h1 {
   font-style: italic;
   width: 400px;
   opacity: 0.4;
+  /* position: relative; */
 }
 
 li {
@@ -184,9 +185,10 @@ input:checked + p {
 
 .icon {
   position: absolute;
-  /* left: 25px; */
+  /* left: 35px; */
   width: 50px;
   padding: 20px 16px;
+  z-index: 999;
 }
 img {
   width: 100%;

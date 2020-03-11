@@ -2,7 +2,7 @@ var input = document.querySelector(".input");
 var ul = document.querySelector("ul");
 var fas = document.querySelector(".icon");
 
-var arr = [];
+var arr = JSON.parse(localStorage.getItem("item")) || [];
 
 function handler(event) {
   if (input.value === "") {
@@ -15,6 +15,7 @@ function handler(event) {
     arr.push(todo);
     todoS(arr);
   }
+  localStorage.setItem("item", JSON.stringify(arr));
 }
 
 function todoS(arr) {
@@ -47,6 +48,7 @@ function todoDelete(event) {
     arr = arr.filter(todo => !(todo.id == event.target.dataset.id));
     // console.log(arr);
     todoS(arr);
+    localStorage.setItem("item", JSON.stringify(arr));
   }
 }
 
@@ -84,6 +86,7 @@ function clearCompleted() {
   // arr.splice(todo, arr.length);
   console.log(arr);
   todoS(arr);
+
   // arr.pull(clearArr)
 
   // todoS(arr);
@@ -91,12 +94,24 @@ function clearCompleted() {
 
 function selectAll() {
   // console.log(arr);
-  arr.forEach(elm => {
-    if (elm.isDone == false) {
-      elm.isDone = true;
-    }
-  });
-  console.log(arr);
+
+  var truearr = arr.filter(x => x.isDone);
+  console.log("truearr", truearr.length);
+  console.log("arr", arr.length);
+
+  if (truearr.length == arr.length || truearr.length == 0) {
+    arr.forEach(y => (y.isDone = !y.isDone));
+
+    console.log("cond", arr);
+  } else {
+    arr.forEach(elm => {
+      if (elm.isDone === false) {
+        elm.isDone = !elm.isDone;
+      }
+    });
+  }
+
+  // console.log(arr);
   todoS(arr);
 }
 
