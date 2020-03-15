@@ -34,6 +34,7 @@ function todoS(arr) {
     li.append(check, p, span);
     ul.append(li);
     check.addEventListener("click", () => strkeItem(todo.id));
+    p.addEventListener("dblclick", editfunction);
     var footer = footerCreate(arr);
     ul.after("");
     ul.after(footer);
@@ -69,22 +70,23 @@ function allF() {
 }
 
 function activeF() {
-  console.log(arr);
+  // console.log(arr);
+
   let Arr = arr.filter(todo => todo.isDone === false);
-  console.log(arr);
+  // console.log(arr);
   todoS(Arr);
 }
 
 function completeF() {
   let completeArr = arr.filter(todo => todo.isDone === true);
-  console.log(arr);
+  // console.log(arr);
   todoS(completeArr);
 }
 
 function clearCompleted() {
   arr = arr.filter(todo => todo.isDone == false);
   // arr.splice(todo, arr.length);
-  console.log(arr);
+  // console.log(arr);
   todoS(arr);
 
   // arr.pull(clearArr)
@@ -96,13 +98,13 @@ function selectAll() {
   // console.log(arr);
 
   var truearr = arr.filter(x => x.isDone);
-  console.log("truearr", truearr.length);
-  console.log("arr", arr.length);
+  // console.log("truearr", truearr.length);
+  // console.log("arr", arr.length);
 
   if (truearr.length == arr.length || truearr.length == 0) {
     arr.forEach(y => (y.isDone = !y.isDone));
 
-    console.log("cond", arr);
+    // console.log("cond", arr);
   } else {
     arr.forEach(elm => {
       if (elm.isDone === false) {
@@ -113,6 +115,22 @@ function selectAll() {
 
   // console.log(arr);
   todoS(arr);
+}
+function editfunction(event) {
+  var editInput = document.createElement("input");
+  editInput.value = event.target.innerHTML;
+  let li = event.target.parentNode;
+  li.replaceChild(editInput, event.target);
+  editInput.addEventListener("keyup", e => {
+    console.log(e.target.value);
+    event.target.value = editInput.value;
+    // console.log(editInput.value);
+    let li = event.target.parentNode;
+    li.replaceChild(event.target, editInput);
+    localStorage.setItem("item", JSON.stringify(arr));
+  });
+  // todoS();
+  localStorage.setItem("item", JSON.stringify(arr));
 }
 
 // ======================================================================
