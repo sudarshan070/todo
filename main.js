@@ -22,6 +22,7 @@ function todoS(arr) {
   ul.innerHTML = "";
   arr.forEach(todo => {
     var li = document.createElement("li");
+    li.setAttribute("data-id", todo.id);
     var check = document.createElement("input");
     check.type = "checkbox";
     check.setAttribute("data-id", todo.id);
@@ -121,16 +122,24 @@ function editfunction(event) {
   editInput.value = event.target.innerHTML;
   let li = event.target.parentNode;
   li.replaceChild(editInput, event.target);
-  editInput.addEventListener("keyup", e => {
-    console.log(e.target.value);
-    event.target.value = editInput.value;
-    // console.log(editInput.value);
+  editInput.addEventListener("keyup", editfunctionStore);
+  // localStorage.setItem("item", JSON.stringify(arr));
+}
+
+function editfunctionStore(event) {
+  if (event.keyCode == 13) {
+    arr.forEach(e => {
+      if (e.id == id) {
+        e.id === event.target.value;
+      }
+    });
+    var id = event.target.parentNode.dataset.id;
+    console.log(id);
+    var editP = document.createElement("p");
+    editP.innerHTML = event.target.value;
     let li = event.target.parentNode;
-    li.replaceChild(event.target, editInput);
-    localStorage.setItem("item", JSON.stringify(arr));
-  });
-  // todoS();
-  localStorage.setItem("item", JSON.stringify(arr));
+    li.replaceChild(editP, event.target);
+  }
 }
 
 // ======================================================================
