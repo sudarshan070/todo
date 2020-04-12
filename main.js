@@ -10,17 +10,17 @@ function handler(event) {
     var todo = {
       text: event.target.value,
       isDone: false,
-      id: Date.now()
+      id: Date.now(),
     };
     arr.push(todo);
+    localStorage.setItem("item", JSON.stringify(arr));
     todoS(arr);
   }
-  localStorage.setItem("item", JSON.stringify(arr));
 }
 
-function todoS(arr) {
+function todoS(array) {
   ul.innerHTML = "";
-  arr.forEach(todo => {
+  array.forEach((todo) => {
     var li = document.createElement("li");
     li.setAttribute("data-id", todo.id);
     var check = document.createElement("input");
@@ -44,18 +44,16 @@ function todoS(arr) {
 }
 
 function todoDelete(event) {
-  //   console.log(event.target);
   if (event.target.tagName === "SPAN") {
-    // console.log("span");
-    arr = arr.filter(todo => !(todo.id == event.target.dataset.id));
-    // console.log(arr);
+    arr = arr.filter((todo) => !(todo.id == event.target.dataset.id));
+
     todoS(arr);
     localStorage.setItem("item", JSON.stringify(arr));
   }
 }
 
 function strkeItem(id) {
-  var Arr = arr.map(todo => {
+  var Arr = arr.map((todo) => {
     if (todo.id == id) {
       todo.isDone = !todo.isDone;
       return todo;
@@ -71,75 +69,56 @@ function allF() {
 }
 
 function activeF() {
-  // console.log(arr);
-
-  let Arr = arr.filter(todo => todo.isDone === false);
-  // console.log(arr);
+  let Arr = arr.filter((todo) => todo.isDone === false);
   todoS(Arr);
 }
 
 function completeF() {
-  let completeArr = arr.filter(todo => todo.isDone === true);
-  // console.log(arr);
+  let completeArr = arr.filter((todo) => todo.isDone === true);
   todoS(completeArr);
 }
 
 function clearCompleted() {
-  arr = arr.filter(todo => todo.isDone == false);
-  // arr.splice(todo, arr.length);
-  // console.log(arr);
+  arr = arr.filter((todo) => todo.isDone == false);
   todoS(arr);
-
-  // arr.pull(clearArr)
-
-  // todoS(arr);
 }
 
 function selectAll() {
-  // console.log(arr);
-
-  var truearr = arr.filter(x => x.isDone);
-  // console.log("truearr", truearr.length);
-  // console.log("arr", arr.length);
-
+  var truearr = arr.filter((x) => x.isDone);
   if (truearr.length == arr.length || truearr.length == 0) {
-    arr.forEach(y => (y.isDone = !y.isDone));
-
-    // console.log("cond", arr);
+    arr.forEach((y) => (y.isDone = !y.isDone));
   } else {
-    arr.forEach(elm => {
+    arr.forEach((elm) => {
       if (elm.isDone === false) {
         elm.isDone = !elm.isDone;
       }
     });
   }
-
-  // console.log(arr);
   todoS(arr);
 }
 function editfunction(event) {
+  let p = event.target;
   var editInput = document.createElement("input");
-  editInput.value = event.target.innerHTML;
+  editInput.classList.add("editInput")
+  editInput.value = p.innerHTML;
   let li = event.target.parentNode;
-  li.replaceChild(editInput, event.target);
-  editInput.addEventListener("keyup", editfunctionStore);
-  // localStorage.setItem("item", JSON.stringify(arr));
-}
-
-function editfunctionStore(event) {
-  if (event.keyCode == 13) {
-    arr.forEach(e => {
-      if (e.id == id) {
-        e.id === event.target.value;
-      }
-    });
-    var id = event.target.parentNode.dataset.id;
-    console.log(id);
-    var editP = document.createElement("p");
-    editP.innerHTML = event.target.value;
-    let li = event.target.parentNode;
-    li.replaceChild(editP, event.target);
-  }
+  li.replaceChild(editInput, p);
+  editInput.addEventListener("keyup", (e) => {
+    if (e.keyCode == 13 && e.target.value != "") {
+      p.innerHTML = editInput.value;
+      li.replaceChild(p, editInput);
+      let updateArr = arr;
+      updateArr.map((todo) => {
+        if (todo.id == li.dataset.id) {
+          console.log(p.innerHTML);
+          todo.text = p.innerHTML;
+        }
+      });
+      localStorage.setItem("item", JSON.stringify(updateArr));
+      console.log(updateArr);
+      todoS(updateArr);
+    }
+  });
 }
 
 // ======================================================================
@@ -159,20 +138,6 @@ var clear_completed = document.createElement("p");
 clear_completed.classList.add("clear_completed");
 clear_completed.textContent = "clear completed";
 
-/* <footer class="footer">
-  <div>
-    <span>0</span>items left
-  </div>
-  <div>
-    <button class="all">All</button>
-    <button class="active">Active</button>
-    <button class="completed">Completed</button>
-  </div>
-  <div class="clear_completed">
-    <span>clear completed</span>
-  </div>
-</footer>; */
-
 // ====================== footer=================
 
 function footerCreate(arr) {
@@ -180,24 +145,16 @@ function footerCreate(arr) {
   footerDiv.innerHTML = "";
   var footer = document.createElement("footer");
   footer.classList.add("footer");
-
-  var itemLeft = document.createElement("p"); // <p>  ... </p>
-  // var spanP = document.createElement("span"); // <span> 0 </span>
-  // spanP.innerHTML = "0";
-  // itemLeft.append(spanP);
-  // itemLeft.innerHTML = ; //   <p> <span> 0 </span> items left </p>
+  var itemLeft = document.createElement("p"); 
   itemLeft.textContent = `${arr.length} Items left`;
-
   footerDiv.append(footer);
   footer.append(itemLeft, all, active, complete, clear_completed);
-
   return footerDiv;
 }
 
 // ========================================================================
 
 fas.addEventListener("click", selectAll);
-
 ul.addEventListener("click", todoDelete);
 input.addEventListener("keyup", handler);
 clear_completed.addEventListener("click", clearCompleted);
